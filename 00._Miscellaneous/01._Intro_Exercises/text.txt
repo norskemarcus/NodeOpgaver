@@ -1,0 +1,9 @@
+Design of REST API:
+
+HTTP Method	  -  Endpoint
+GET            	/monkeys
+GET	            /monkeys/{id}
+POST	          /monkeys
+PATCH	          /monkeys/{id}
+PUT	            /monkeys/{id}
+DELETE	        /monkeys/{id}
