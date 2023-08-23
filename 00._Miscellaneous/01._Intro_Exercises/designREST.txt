@@ -1,3 +1,4 @@
+
 Design of REST API:
 
 HTTP Method	  -  Endpoint
@@ -7,3 +8,5 @@ POST	          /monkeys
 PATCH	          /monkeys/{id}
 PUT	            /monkeys/{id}
 DELETE	        /monkeys/{id}
+
+

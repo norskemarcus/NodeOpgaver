@@ -45,12 +45,15 @@ console.log(avg);
 
 const letters = "abc";
 
+// Den bedste måde:
+const index = letters.indexOf('c'); // index of the character "c" 
+console.log(index);
+
 const result3 = letters.charAt(2);
 //console.log(result3);
 
-const result4 = letters[2]; //bracket notation (dot notation)
+const result4 = letters[2]; //bracket notation (dot notation er en anden)
 //console.log(result4);
-
 
 
 
@@ -61,6 +64,6 @@ const fact = "You are learning javascript!";
 
 // capitalize the J in Javascript
 const modifiedFact = fact.replace('javascript', 'JavaScript');
-//console.log(modifiedFact);
+console.log(modifiedFact);
 
 // --------------------------------------

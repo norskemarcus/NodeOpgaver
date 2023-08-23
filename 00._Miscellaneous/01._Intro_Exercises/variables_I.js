@@ -10,20 +10,14 @@ consoleLogCounter++;
 
 // The 3 ways to make strings
 
-console.log ("This is the first way");
-console.log ('This is the second way');
+console.log("This is the first way");
+console.log("This is the second way");
 
-// backtexkts, multi line litteral?
-console.log(`This is the ${1+2} way: I can write both ´´´and "" "" ${scheduledBreakTime} 
+// backtexts, multi line litteral?
+console.log(`This is the ${1 + 2} way: I can write both ´´´and "" "" ${scheduledBreakTime} 
 
 with som air between`);
 
 consoleLogCounter += 3;
 
 console.log(consoleLogCounter);
-
-
-
-
-
-

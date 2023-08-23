@@ -22,13 +22,10 @@ const number = 1;
 // OBS hvis det er en bogstav midt inde i, dropper den resten af tallet efter.
 console.log(number + parseInt(year));
 
-// Hvis man plusser på en bogstav får man Nan = Not a number
+// Hvis man plusser på en bogstav får man "Nan" = Not a number
 const result2 = Number(year) + number;
 
 // pluss foran en string, samme som at skrive Number foran
 const result3 = +year + number;
 console.log(result3);
-
-
-
 // --------------------------------------
