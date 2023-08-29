@@ -11,9 +11,25 @@ console.log(letters[1]);
 // Exercise 2 - Array Positioning
 
 const friends = [];
+
+const marcus = {
+  name: "Marcus",
+  age: 38,
+};
+
+const tommy = {
+  name: "Tommy",
+  age: 35,
+};
+
+const sebastian = {
+  name: "Sebastian",
+  age: 37,
+};
+
 // What a lonely array. Add at least 3 friend objects to it.
-friends.push("Tommy", "Sebastian", "Marcus");
-console.log(friends);
+friends.push(marcus, tommy, sebastian);
+console.log("Friends:", friends);
 
 // --------------------------------------
 // Exercise 3 - Get the index of first occurance of that value.

@@ -1,0 +1,11 @@
+Package managers:
+npm, yarn, pnpm, maven, pip, gradle, ant, cargo, 
+
+maven           vs.          npm 
+
+pom.xml                      package.json
+
+meta info                    meta info 
+dependencies                 dependencies
+life cycle methods           scripts
+
