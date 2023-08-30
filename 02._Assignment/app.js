@@ -34,7 +34,11 @@ app.get("/mountains", (req, res) => {
 
 // GET all mountains with styling
 app.get("/mountains", (req, res) => {
-  const mountainList = mountains.map((mountain) => `<li><a href="/mountains/${mountain.id}">${mountain.id}. ${mountain.name}: ${mountain.height} m</a></li>`);
+  // use .map() function to transform each object in the mountains array into a formatted list item
+  const mountainList = mountains.map(
+    (mountain) => `
+  <li><a href="/mountains/${mountain.id}">${mountain.id}. ${mountain.name}: ${mountain.height} m</a></li>`
+  );
 
   const mountainListHtml = `<ul>${mountainList.join("")}</ul>`;
 
@@ -55,7 +59,7 @@ app.get("/mountains", (req, res) => {
 `);
 });
 
-// GET mountain by id
+// GET mountain by id ------------------------------------------------------------------------------------------------------
 /* app.get("/mountains/:id", (req, res) => {
   const mountainId = parseInt(req.params.id); // Convert id to an integer
   const mountain = mountains.find((mountain) => mountain.id === mountainId);
@@ -65,7 +69,9 @@ app.get("/mountains", (req, res) => {
   } else {
     res.status(404).send(`Mountain no. ${req.params.id} not found. I only have ${mountains.length} mountains in my database`);
   }
-}); */
+}); 
+-------------------------------------------------------------------------------------------------------------------------------
+*/
 
 // GET mountain by id with styling
 app.get("/mountains/:id", (req, res) => {

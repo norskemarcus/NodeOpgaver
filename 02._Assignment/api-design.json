@@ -1,0 +1,36 @@
+{
+  "API Name": "Mountains API",
+  "Description": "An API for accessing information about mountains.",
+  "Endpoints": [
+    {
+      "HTTP Method": "GET",
+      "Endpoint": "/mountains",
+      "Description": "Returns a list of mountain resources."
+    },
+    {
+      "HTTP Method": "GET",
+      "Endpoint": "/mountains/{id}",
+      "Description": "Returns the mountain resource with the specified ID."
+    },
+    {
+      "HTTP Method": "POST",
+      "Endpoint": "/mountains",
+      "Description": "Creates a new mountain resource based on the submitted data."
+    },
+    {
+      "HTTP Method": "PATCH",
+      "Endpoint": "/mountains/{id}",
+      "Description": "bruges til at opdatere en del af en eksisterende mountains ved hjælp af dens ID. Det bruger HTTP PATCH-metoden og opdaterer mountains -ressourcen med de indsendte ændringer."
+    },
+    {
+      "HTTP Method": "PUT",
+      "Endpoint": "/mountains/{id}",
+      "Description": "bruges til at opdatere en eksisterende mountains fuldstændigt ved hjælp af dens ID. Det bruger HTTP PUT-metoden og erstatter mountains -ressourcen med de indsendte data."
+    },
+    {
+      "HTTP Method": "DELETE",
+      "Endpoint": "/mountains/{id}",
+      "Description": "Removes the mountain resource with the specified ID."
+    }
+  ]
+}
