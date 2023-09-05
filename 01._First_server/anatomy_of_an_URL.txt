@@ -1,0 +1,15 @@
+https://www.google.com/search?q=test
+
+protocol: https
+signify :// jdbc://
+subdomæne www
+google domain
+.com top-level domain
+/search. endpoint
+/search/1 path variable
+
+?hl=en&q=test 
+query string (inkl ?)
+query paramaters, & binder de sammen
+key, value pair?
+
