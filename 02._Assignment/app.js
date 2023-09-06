@@ -237,7 +237,10 @@ app.use((req, res) => {
     <body>
       <div class="message-container">
         <p>Ain't no mountain high enough to handle that route!<br>
-        Check your spelling in the browser or try this route:<br><a href="http://localhost:8080/mountains">localhost:8080/mountains</a></p>
+        Check your spelling in the browser or try this route:<br><a href="http://localhost:8080/mountains">localhost:8080/mountains</a> or:</p>
+        <p>
+        <a href="https://mountainapp.azurewebsites.net/mountains">https://mountainapp.azurewebsites.net/mountains</a>
+        </p>
       </div>
     </body>
     </html>
@@ -245,7 +248,7 @@ app.use((req, res) => {
 });
 
 // ---------------------------------------------------------------------------------------
-
+//const PORT = process.env.PORT || 3000;
 const PORT = 8080;
 app.listen(PORT, error => {
   if (error) {

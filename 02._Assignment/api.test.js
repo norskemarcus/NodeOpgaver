@@ -7,24 +7,24 @@ const request = require('supertest'); // A library for making HTTP requests in t
 const app = require('./app.js'); // Import your Express app
 
 /* 
- PASS  ./api.test.js
+PASS  ./api.test.js
   GET /mountains
-    √ should return a list of mountains (86 ms)
+    √ should return a list of mountains (66 ms)
   GET /mountains/:id
     √ should return a specific mountain by ID (8 ms)
-    √ should return a 404 status for a non-existing mountain (13 ms)
+    √ should return a 404 status for a non-existing mountain (7 ms)
   POST /mountains
-    √ should create a new mountain (40 ms)
-    √ should return a 400 status for invalid data (6 ms)
+    √ should create a new mountain (30 ms)
+    √ should return a 400 status for invalid data (10 ms)
   DELETE /mountains/:id
     √ should delete an existing mountain (6 ms)
-    √ should return a 404 status for deleting a non-existing mountain (6 ms)
+    √ should return a 404 status for deleting a non-existing mountain (5 ms)
 
 Test Suites: 1 passed, 1 total
 Tests:       7 passed, 7 total
 Snapshots:   0 total
-Time:        2.296 s
-Ran all test suites. */
+Time:        1.717 s, estimated 2 s
+Ran all test suites.. */
 
 // GET /mountains
 describe('GET /mountains', () => {
