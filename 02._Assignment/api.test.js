@@ -26,6 +26,7 @@ Snapshots:   0 total
 Time:        2.296 s
 Ran all test suites. */
 
+// GET /mountains
 describe('GET /mountains', () => {
   it('should return a list of mountains', async () => {
     const response = await request(app).get('/mountains');
@@ -34,30 +35,26 @@ describe('GET /mountains', () => {
   });
 });
 
-// -----------------------------------------------------------------------
-//GET /mountains/:id
-
+// GET /mountains/:id
 describe('GET /mountains/:id', () => {
   it('should return a specific mountain by ID', async () => {
-    const mountainId = 1; // Replace with an existing mountain ID
+    const mountainId = 1;
     const response = await request(app).get(`/mountains/${mountainId}`);
     expect(response.status).toBe(200);
     expect(response.body.id).toBe(mountainId);
   });
 
   it('should return a 404 status for a non-existing mountain', async () => {
-    const nonExistingMountainId = 1000; // Replace with a non-existing mountain ID
+    const nonExistingMountainId = 1000;
     const response = await request(app).get(`/mountains/${nonExistingMountainId}`);
     expect(response.status).toBe(404);
   });
 });
 
-// -----------------------------------------------------------------------
 // POST /mountains
-
 describe('POST /mountains', () => {
   it('should create a new mountain', async () => {
-    const newMountain = { name: 'New Mountain', height: 8000 }; // Replace with test data
+    const newMountain = { name: 'Slættaratindur', height: 880 };
     const response = await request(app).post('/mountains').send(newMountain);
 
     expect(response.status).toBe(201);
@@ -72,18 +69,16 @@ describe('POST /mountains', () => {
   });
 });
 
-// -----------------------------------------------------------------------
 // DELETE /mountains/:id
-
 describe('DELETE /mountains/:id', () => {
   it('should delete an existing mountain', async () => {
-    const mountainIdToDelete = 1; // Replace with an existing mountain ID
+    const mountainIdToDelete = 1;
     const response = await request(app).delete(`/mountains/${mountainIdToDelete}`);
     expect(response.status).toBe(204);
   });
 
   it('should return a 404 status for deleting a non-existing mountain', async () => {
-    const nonExistingMountainId = 1000; // Replace with a non-existing mountain ID
+    const nonExistingMountainId = 1000;
     const response = await request(app).delete(`/mountains/${nonExistingMountainId}`);
     expect(response.status).toBe(404);
   });
