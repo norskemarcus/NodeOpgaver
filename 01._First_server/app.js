@@ -71,12 +71,15 @@ app.get('/wallet/:withdrawalAmount', (req, res) => {
   }
 });
 
+// Lave klient post request i Postman
+// Express = server
 app.post('/giveMeTheBody', (req, res) => {
   console.log(req.body);
   res.send(req.body);
 });
 
 // body-parser ligger i node_modules, skal ikke installeres
+// bruge for at parse json - forklare dette nærmere
 
 // skal være i bunden
 app.listen(8080); // hang in the terminal, check http://localhost:8080/
