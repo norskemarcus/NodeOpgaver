@@ -1,4 +1,7 @@
-// Run the tests with: npx jest
+// npm install --save-dev jest --> ?
+// npm install --save-dev supertest
+// Run the tests from other terminal: npx jest
+// module.exports = app; // Export the Express app from
 
 const request = require('supertest'); // A library for making HTTP requests in tests
 const app = require('./app.js'); // Import your Express app
