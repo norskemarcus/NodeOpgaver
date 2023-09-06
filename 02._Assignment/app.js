@@ -1,14 +1,7 @@
-// entry point: lave en package.json,
-
 const express = require('express'); // import express
-
 const app = express(); // creates an express application
 module.exports = app; // Export the Express app
-
-// body-parser ligger i node_modules, bruge for at parse json
 app.use(express.json());
-
-// Serve static files from the "public" folder
 app.use(express.static('public'));
 
 const mountains = [
@@ -29,33 +22,31 @@ const mountains = [
   { id: 15, name: 'Gyachung Kang', height: 7952 },
 ];
 
-// Reusable functions
-
-// Function to find a mountain by ID
 const findMountainById = id => {
   return mountains.find(mountain => mountain.id === id);
 };
 
-// Function to validate mountain data, obs data = mountain
-
 const validateMountainData = data => {
-  // If any of these fields are missing, it returns an object with valid set to false and an error message.
+  // If any of these fields are missing, it returns an object with valid set to false
   if (!data || !data.name || !data.height) {
-    return { valid: false, error: 'Mountain data must contain name and height fields.' };
+    return { valid: false, error: 'A mountain must contain a name and a height.' };
   }
   // use the some method to check if any other mountain already has the same name
   if (mountains.some(mountain => mountain.name === data.name)) {
     return { valid: false, error: 'A mountain with the same name already exists.' };
   }
-  const height = parseFloat(data.height); // OBS parseFloat: If the height cannot be parsed as a valid number, it will trigger the "Invalid height" error message.
+  const height = Number(data.height);
 
-  //  If the height is not a positive number or exceeds the height of Mount Everest (8848 meters), it returns an object with valid set to false and an error message.
   if (isNaN(height) || height <= 0 || height > 8848) {
-    return { valid: false, error: 'Invalid height. Height must be a positive number less than or equal to 8848.' };
+    return { valid: false, error: 'Invalid height. Height must be a positive number less than or equal to Himalayas 8848 m.' };
   }
   // If all checks pass, it returns an object with valid set to true.
   return { valid: true };
 };
+
+// ---------------------------------------------------------------------------------------
+
+// CRUD MOUNTAIN API
 
 // GET all mountains: /mountains
 app.get('/mountains', (req, res) => {
@@ -66,9 +57,7 @@ app.get('/mountains', (req, res) => {
 
 // GET mountain by id
 app.get('/mountains/:id', (req, res) => {
-  // Convert id to an integer, evt. Number(req.params.id)
-  const mountainId = parseInt(req.params.id);
-
+  const mountainId = Number(req.params.id);
   const mountain = findMountainById(mountainId);
 
   if (mountain) {
@@ -81,7 +70,6 @@ app.get('/mountains/:id', (req, res) => {
 // ---------------------------------------------------------------------------------------
 
 // Get a new ID for a new mountain (NB! Reuses IDs if you delete the highest ID!)
-// Map with ternary operator
 function getNextMountainId() {
   // laver en ny liste med kun id´ene fra mountains
   let numbers = mountains.map(mountain => mountain.id);
@@ -97,25 +85,19 @@ function getNextMountainId() {
 // ---------------------------------------------------------------------------------------
 
 // POST route to create a new mountain
-// lave client request i Postman, Express er server
+// lave client request i Postman, Express = server
 app.post('/mountains', (req, res) => {
   try {
     const newMountain = req.body;
-
-    // Ensure that the request body contains the necessary data (name and height)
-    // Checks if the name already exists
     const validation = validateMountainData(newMountain);
 
     if (!validation.valid) {
-      // If the data = not valid --> 400 status response with the corresponding error message.
       res.status(400).json({ error: validation.error });
       return;
     }
 
-    // Give the new mountain an auto-increment ID
     newMountain.id = getNextMountainId();
 
-    // Add the new mountain to your in-memory data store
     mountains.push(newMountain);
 
     // Return the newly created mountain
@@ -127,11 +109,12 @@ app.post('/mountains', (req, res) => {
 });
 
 // ---------------------------------------------------------------------------------------
+
 // PATCH = partial updates to an existing resource. Remember PATCH as "Patchwork":
 
 app.patch('/mountains/:id', (req, res) => {
   try {
-    const mountainId = parseInt(req.params.id);
+    const mountainId = Number(req.params.id);
     const updatedAttributes = req.body;
     const mountainToUpdate = findMountainById(mountainId);
 
@@ -172,13 +155,10 @@ app.patch('/mountains/:id', (req, res) => {
 
 // ---------------------------------------------------------------------------------------
 
-// PUT = expected to send the entire resource, and it will completely replace the existing resource with the new one
-// Remember PUT as "Replace"
+// PUT = expected to send the entire resource, and it will completely replace the existing resource with the new one. Remember PUT as "Replace"
 app.put('/mountains/:id', (req, res) => {
   try {
-    const mountainId = parseInt(req.params.id);
-
-    // Find the mountain index with the given ID
+    const mountainId = Number(req.params.id);
     const mountainToUpdate = findMountainById(mountainId);
 
     if (!mountainToUpdate) {
@@ -211,7 +191,7 @@ app.put('/mountains/:id', (req, res) => {
     mountains[mountainToUpdate.id - 1] = { ...req.body, id: mountainId };
     /*
     -1 to get the correct index in the array, since array start from 0, but mountain Id start from 1
-     
+
     ...req.body = copy all the properties from the req.body object into the new object.
      
     id: mountainId = set the id property to mountainId to ensure that the ID remains consistent after the update.
@@ -226,18 +206,18 @@ app.put('/mountains/:id', (req, res) => {
 // DELETE
 app.delete('/mountains/:id', (req, res) => {
   try {
-    const mountainId = parseInt(req.params.id);
+    const mountainId = Number(req.params.id);
     const mountainToDelete = findMountainById(mountainId);
 
     if (!mountainToDelete) {
       res.status(404).json({ error: `Mountain with ID ${mountainId} not found.` });
       return;
     }
-    // Remove an element from the mountains array at a specific index
+    // Splice = remove an element from the mountains array at a specific index
     // 1 = This argument specifies how many elements to remove from the array starting at the mountainToDelete.
     mountains.splice(mountainToDelete, 1);
 
-    //res.status(204).json({ message: `Mountain with ID ${mountainId} has been successfully deleted.` });
+    // OBS: dette virker ikke: res.status(204).json({ message: `Mountain with ID ${mountainId} has been successfully deleted.` });
     res.status(204).send();
   } catch (error) {
     console.error('Error deleting the mountain:', error);
