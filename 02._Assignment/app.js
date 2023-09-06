@@ -46,7 +46,8 @@ const validateMountainData = data => {
   if (mountains.some(mountain => mountain.name === data.name)) {
     return { valid: false, error: 'A mountain with the same name already exists.' };
   }
-  const height = parseInt(data.height);
+  const height = parseFloat(data.height); // OBS parseFloat: If the height cannot be parsed as a valid number, it will trigger the "Invalid height" error message.
+
   //  If the height is not a positive number or exceeds the height of Mount Everest (8848 meters), it returns an object with valid set to false and an error message.
   if (isNaN(height) || height <= 0 || height > 8848) {
     return { valid: false, error: 'Invalid height. Height must be a positive number less than or equal to 8848.' };
@@ -138,12 +139,24 @@ app.patch('/mountains/:id', (req, res) => {
       return;
     }
 
-    const validation = validateMountainData(mountainToUpdate);
-    // const validation = validateMountainData({ ...mountainToUpdate, ...updatedAttributes });
+    // Validate the updated name (check if it's not already used by another mountain)
+    if (updatedAttributes.name !== undefined) {
+      const newName = updatedAttributes.name;
 
-    if (!validation.valid) {
-      res.status(400).json({ error: validation.error });
-      return;
+      if (mountains.some(mountain => mountain.name === newName && mountain.id !== mountainId)) {
+        res.status(400).json({ error: `A mountain with the name '${newName}' already exists.` });
+        return;
+      }
+    }
+
+    // Validate the updated height
+    if (updatedAttributes.height !== undefined) {
+      const newHeight = parseInt(updatedAttributes.height);
+
+      if (isNaN(newHeight) || newHeight <= 0 || newHeight > 8848) {
+        res.status(400).json({ error: 'Invalid height value. Height must be a positive number less than or equal to Himalayas height of 8848 m.' });
+        return;
+      }
     }
 
     // Update the mountain's attributes
@@ -172,16 +185,36 @@ app.put('/mountains/:id', (req, res) => {
       return;
     }
 
-    const validation = validateMountainData(mountainToUpdate);
-    //  const validation = validateMountainData({ ...mountainToUpdate, ...req.body });
+    // Validate the updated name (check if it's not already used by another mountain)
+    if (req.body.name !== undefined) {
+      const newName = req.body.name;
 
-    if (!validation.valid) {
-      res.status(400).json({ error: validation.error });
-      return;
+      if (mountains.some(mountain => mountain.name === newName && mountain.id !== mountainId)) {
+        res.status(400).json({ error: `A mountain with the name '${newName}' already exists.` });
+        return;
+      }
     }
-    // Replace the mountain with new data from the request body
-    mountains[mountainToUpdate.id - 1] = { ...req.body, id: mountainId };
 
+    // Validate the updated height
+    if (req.body.height !== undefined) {
+      const newHeight = parseInt(req.body.height);
+
+      if (isNaN(newHeight) || newHeight <= 0 || newHeight > 8848) {
+        res.status(400).json({ error: 'Invalid height value. Height must be a positive number less than or equal to Himalayas height of 8848 m.' });
+        return;
+      }
+    }
+
+    //  creates a new mountain object with updated attributes.
+
+    mountains[mountainToUpdate.id - 1] = { ...req.body, id: mountainId };
+    /*
+    -1 to get the correct index in the array, since array start from 0, but mountain Id start from 1
+     
+    ...req.body = copy all the properties from the req.body object into the new object.
+     
+    id: mountainId = set the id property to mountainId to ensure that the ID remains consistent after the update.
+    */
     res.status(200).json(mountains[mountainToUpdate.id - 1]);
   } catch (error) {
     console.error('Error updating the mountain:', error);
