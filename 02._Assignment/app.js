@@ -3,6 +3,7 @@
 const express = require('express'); // import express
 
 const app = express(); // creates an express application
+module.exports = app; // Export the Express app
 
 // body-parser ligger i node_modules, bruge for at parse json
 app.use(express.json());
