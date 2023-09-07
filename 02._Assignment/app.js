@@ -248,8 +248,8 @@ app.use((req, res) => {
 });
 
 // ---------------------------------------------------------------------------------------
-const PORT = process.env.PORT || 3000;
-//const PORT = 8080;
+//const PORT = process.env.PORT || 3000;
+const PORT = 8080;
 app.listen(PORT, error => {
   if (error) {
     console.log('Error starting the server', error);
