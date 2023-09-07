@@ -257,7 +257,3 @@ app.listen(PORT, error => {
   }
   console.log('Server is running on port', 8080);
 });
-
-app.get('/mountains', (req, res) => {
-  res.sendFile(path.join(__dirname, 'html', 'mountains.html'));
-});
