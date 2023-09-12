@@ -85,11 +85,34 @@ ul {
 
   <script> 
 
-    // Determine user's timezone
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    document.getElementById('userTimezone').textContent = userTimezone;
 
+   
+  
+      //  offset = time zone offset in hours relative to UTC
+/*     const cities = [
+      { name: 'New York', offset: -4 },
+      { name: 'London', offset: 1 },
+      { name: 'Tokyo', offset: 9 },
+      { name: 'Beijing', offset: 8 },
+      { name: 'Paris', offset: 2 },
+      { name: 'Los Angeles', offset: -7 },
+      { name: 'Sydney', offset: 10 },
+      { name: 'Moscow', offset: 3 },
+      { name: 'Dubai', offset: 4 },
+      { name: 'São Paulo', offset: -3 },
+      { name: 'Mumbai', offset: 5.5 },
+      { name: 'Toronto', offset: -4 },
+      { name: 'Singapore', offset: 8 },
+      { name: 'Istanbul', offset: 3 },
+      { name: 'Cairo', offset: 2 },
+      { name: 'Johannesburg', offset: 2 },
+      { name: 'Bangkok', offset: 7 },
+      { name: 'Mexico City', offset: -5 },
+      { name: 'Buenos Aires', offset: -3 },
+      { name: 'Chicago', offset: -5 },
 
+    ];
+       */
     var timeZoneList = [
   {"value":"Europe/London","text":"(UTC+00:00) London","place":"London","time":"+00:00"},
   {"value":"Europe/Copenhagen","text":"(UTC+01:00) Copenhagen","place":"Copenhagen","time":"+01:00"},
@@ -107,35 +130,35 @@ ul {
   {"value":"Pacific/Honolulu","text":"(UTC-10:00) Hawaii","place":"Hawaii","time":"-10:00"},
 ];
 
-// Populate the dropdown for selecting the home city and city to call
-const homeCitySelector = document.getElementById('homeCitySelector');
-const citySelector = document.getElementById('citySelector');
-populateDropdown(homeCitySelector, timeZoneList);
-populateDropdown(citySelector, timeZoneList);
+   // Populate the dropdown for selecting the home city and city to call
+    const homeCitySelector = document.getElementById('homeCitySelector');
+    const citySelector = document.getElementById('citySelector');
+    populateDropdown(homeCitySelector, timeZoneList);
+    populateDropdown(citySelector, timeZoneList);
 
 
-  // Function to populate a dropdown with cities
-  function populateDropdown(selector, cityArray) {
-  // Create an initial "Select a City" option
-  const defaultOption = document.createElement('option');
-  defaultOption.value = '';
-  defaultOption.text = 'Select a City';
-  selector.appendChild(defaultOption);
+     // Function to populate a dropdown with cities
+     function populateDropdown(selector, cityArray) {
+      // Create an initial "Select a City" option
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.text = 'Select a City';
+      selector.appendChild(defaultOption);
 
-  // Populate the dropdown with city options from the provided cityArray
-  cityArray.forEach(city => {
-    const option = document.createElement('option');
-    option.value = city.value;
-    option.text = city.text;
-    selector.appendChild(option);
-  });
-}
-
-
+      // Populate the dropdown with city options from the provided cityArray
+      cityArray.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city.value;
+        option.text = city.text;
+        selector.appendChild(option);
+      });
+    }
 
 
- // Function to calculate and display the time difference
- function calculateTimeDifference() {
+
+
+   // Function to calculate and display the time difference
+   function calculateTimeDifference() {
       const homeCity = document.getElementById('homeCitySelector').value;
       const selectedCity = document.getElementById('citySelector').value;
 
@@ -144,20 +167,20 @@ populateDropdown(citySelector, timeZoneList);
       }
 
       const homeCityData = timeZoneList.find(city => city.value === homeCity);
-  const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
+      const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
 
-  if (homeCityData && selectedCityData) {
-    const homeTimeOffset = parseFloat(homeCityData.time);
-    const selectedTimeOffset = parseFloat(selectedCityData.time);
-    const timeDifference = selectedTimeOffset - homeTimeOffset;
+      if (homeCityData && selectedCityData) {
+        const homeTimeOffset = parseFloat(homeCityData.time);
+        const selectedTimeOffset = parseFloat(selectedCityData.time);
+        const timeDifference = selectedTimeOffset - homeTimeOffset;
 
-    const timeDifferenceElement = document.getElementById('timeDifference');
-    timeDifferenceElement.textContent = `Time difference: ${timeDifference > 0 ? '+' : ''}${timeDifference} hours`;
-  }
-}
+        const timeDifferenceElement = document.getElementById('timeDifference');
+        timeDifferenceElement.textContent = `Time difference: ${timeDifference > 0 ? '+' : ''}${timeDifference} hours`;
+      }
+    }
 
-
-</script>
+      
+  </script>
 
 </body>
 </html>
