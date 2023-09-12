@@ -1,10 +1,12 @@
 const express = require('express'); // import express
 const app = express(); // creates an express application
 module.exports = app; // Export the Express app
+
+// gør at man kan passe json data i body
 app.use(express.json());
 app.use(express.static('public'));
 
-const mountains = [
+let mountains = [
   { id: 1, name: 'Mount Everest', height: 8848 },
   { id: 2, name: 'K2', height: 8611 },
   { id: 3, name: 'Kangchenjunga', height: 8586 },
@@ -92,7 +94,7 @@ app.post('/mountains', (req, res) => {
     const validation = validateMountainData(newMountain);
 
     if (!validation.valid) {
-      res.status(400).json({ error: validation.error });
+      res.status(400).send({ error: validation.error });
       return;
     }
 
@@ -101,10 +103,12 @@ app.post('/mountains', (req, res) => {
     mountains.push(newMountain);
 
     // Return the newly created mountain
-    res.status(201).json(newMountain);
+    res.status(201).send(newMountain);
+    // eller: res.send({data: newMountain})
+    // prefix ++currentId i stedet for currentId++ evt skrive currentId++ og så på næste linje skrive id = currentId (assigne)
   } catch (error) {
     console.error('Error creating a new mountain:', error);
-    res.status(500).json({ error: 'Failed to create the mountain.' });
+    res.status(500).send({ error: 'Failed to create the mountain.' });
   }
 });
 
@@ -119,7 +123,7 @@ app.patch('/mountains/:id', (req, res) => {
     const mountainToUpdate = findMountainById(mountainId);
 
     if (!mountainToUpdate) {
-      res.status(404).json({ error: `Mountain with ID ${mountainId} not found.` });
+      res.status(404).send({ error: `Mountain with ID ${mountainId} not found.` });
       return;
     }
 
@@ -128,17 +132,21 @@ app.patch('/mountains/:id', (req, res) => {
       const newName = updatedAttributes.name;
 
       if (mountains.some(mountain => mountain.name === newName && mountain.id !== mountainId)) {
-        res.status(400).json({ error: `A mountain with the name '${newName}' already exists.` });
+        res.status(400).send({ error: `A mountain with the name '${newName}' already exists.` });
         return;
       }
     }
+
+    // OBS sikre mod at man ikke kan ændre id: sende id med spread operators
+    // let foundIndex = mountains.findIndex((mountain => se anders sit))
+    // mountains[foundIndex] = {...mountains[foundIndex], ...req.body, id: Number(req.params.id)};
 
     // Validate the updated height
     if (updatedAttributes.height !== undefined) {
       const newHeight = parseInt(updatedAttributes.height);
 
       if (isNaN(newHeight) || newHeight <= 0 || newHeight > 8848) {
-        res.status(400).json({ error: 'Invalid height value. Height must be a positive number less than or equal to Himalayas height of 8848 m.' });
+        res.status(400).send({ error: 'Invalid height value. Height must be a positive number less than or equal to Himalayas height of 8848 m.' });
         return;
       }
     }
@@ -146,10 +154,10 @@ app.patch('/mountains/:id', (req, res) => {
     // Update the mountain's attributes
     Object.assign(mountainToUpdate, updatedAttributes);
 
-    res.status(200).json(mountainToUpdate);
+    res.status(200).send(mountainToUpdate);
   } catch (error) {
     console.error('Error updating the mountain:', error);
-    res.status(500).json({ error: 'Failed to update the mountain.' });
+    res.status(500).send({ error: 'Failed to update the mountain.' });
   }
 });
 
@@ -162,7 +170,7 @@ app.put('/mountains/:id', (req, res) => {
     const mountainToUpdate = findMountainById(mountainId);
 
     if (!mountainToUpdate) {
-      res.status(404).json({ error: `Mountain with ID ${mountainId} not found.` });
+      res.status(404).send({ error: `Mountain with ID ${mountainId} not found.` });
       return;
     }
 
@@ -171,7 +179,7 @@ app.put('/mountains/:id', (req, res) => {
       const newName = req.body.name;
 
       if (mountains.some(mountain => mountain.name === newName && mountain.id !== mountainId)) {
-        res.status(400).json({ error: `A mountain with the name '${newName}' already exists.` });
+        res.status(400).send({ error: `A mountain with the name '${newName}' already exists.` });
         return;
       }
     }
@@ -181,7 +189,7 @@ app.put('/mountains/:id', (req, res) => {
       const newHeight = parseInt(req.body.height);
 
       if (isNaN(newHeight) || newHeight <= 0 || newHeight > 8848) {
-        res.status(400).json({ error: 'Invalid height value. Height must be a positive number less than or equal to Himalayas height of 8848 m.' });
+        res.status(400).send({ error: 'Invalid height value. Height must be a positive number less than or equal to Himalayas height of 8848 m.' });
         return;
       }
     }
@@ -196,12 +204,19 @@ app.put('/mountains/:id', (req, res) => {
      
     id: mountainId = set the id property to mountainId to ensure that the ID remains consistent after the update.
     */
-    res.status(200).json(mountains[mountainToUpdate.id - 1]);
+    res.status(200).send(mountains[mountainToUpdate.id - 1]);
   } catch (error) {
     console.error('Error updating the mountain:', error);
-    res.status(500).json({ error: 'Failed to update the mountain.' });
+    res.status(500).send({ error: 'Failed to update the mountain.' });
   }
 });
+
+/* 
+// using find finder objektet, findIndex finder index
+const findMountainById = id => {
+  return mountains.findIndex(mountain => mountain.id === id);
+};
+ */
 
 // DELETE
 app.delete('/mountains/:id', (req, res) => {
@@ -210,18 +225,20 @@ app.delete('/mountains/:id', (req, res) => {
     const mountainToDelete = findMountainById(mountainId);
 
     if (!mountainToDelete) {
-      res.status(404).json({ error: `Mountain with ID ${mountainId} not found.` });
+      // 404 klientfejl?
+      // 400 = bad request
+      res.status(404).send({ error: `Mountain with ID ${mountainId} not found.` });
+      res.send({ error: `Mountain with ID ${mountainId} not found.` });
       return;
     }
     // Splice = remove an element from the mountains array at a specific index
     // 1 = This argument specifies how many elements to remove from the array starting at the mountainToDelete.
     mountains.splice(mountainToDelete, 1);
 
-    // OBS: dette virker ikke: res.status(204).json({ message: `Mountain with ID ${mountainId} has been successfully deleted.` });
-    res.status(204).send();
+    res.status(200).send({ message: `Mountain with ID ${mountainId} has been successfully deleted.` });
   } catch (error) {
     console.error('Error deleting the mountain:', error);
-    res.status(500).json({ error: 'Failed to delete the mountain.' });
+    res.status(500).jssendon({ error: 'Failed to delete the mountain.' });
   }
 });
 

@@ -1,11 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <style>
+    #title {
+      color: rgba(157, 39, 39, 0.749);
+    }
+  </style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>First HTML Server</title>
 </head>
 <body>
-  <h1>Home</h1>
+ 
+  <script> 
+ 
+document.addEventListener('DOMContentLoaded', () => {
+  const userNameElement = document.getElementById('userName');
+  const cityTimesElement = document.getElementById('cityTimes');
+  const callTimesElement = document.getElementById('callTimes');
+
+  const userName = prompt('Enter your name:');
+  if (userName) {
+    userNameElement.textContent = userName;
+
+    // Replace these with actual city names and time differences
+    const cities = [
+      { name: 'New York', offset: -4 },
+      { name: 'London', offset: 1 },
+      { name: 'Tokyo', offset: 9 },
+    ];
+
+    const localTime = new Date();
+    const localOffset = localTime.getTimezoneOffset() / 60;
+
+    cities.forEach(city => {
+      const cityTime = localTime.getUTCHours() + localOffset + city.offset;
+      const cityTimeFormatted = cityTime < 0 ? cityTime + 24 : cityTime;
+      const listItem = document.createElement('li');
+      listItem.textContent = `${city.name}: ${cityTimeFormatted}:00`;
+      cityTimesElement.appendChild(listItem);
+
+      // Suggest appropriate time to call
+      const callTime = cityTime + 9; // Suggest calling 9 hours after their local time
+      const callTimeFormatted = callTime < 0 ? callTime + 24 : callTime;
+      const callListItem = document.createElement('li');
+      callListItem.textContent = `${city.name}: Call at ${callTimeFormatted}:00`;
+      callTimesElement.appendChild(callListItem);
+    });
+  }
+});
+
+  </script>
 </body>
 </html>

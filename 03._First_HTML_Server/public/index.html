@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+header {
+  background-color: #3079d1;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 36px;
+  margin: 0;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+p {
+  font-size: 18px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#userName {
+  font-weight: bold;
+}
+  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Time Converter</title>
+
+</head>
+<body>
+    <header>
+        <h1> <h1>World Time Converter</h1></h1>
+        <p id="greeting">Hello, <span id="userName">stranger</span>!</p>
+    
+    </header>
+
+    <main>
+        <section>
+            <p>Your Timezone: <span id="userTimezone"></span></p>  
+        </section>
+    
+        <section>
+            <h2>Time in Different Cities</h2>
+            <ul id="cityTimes"></ul>
+        </section>
+
+        <section>
+            <h2>Best Time to Call</h2>
+            <p>Based on your local time, here's when it's appropriate to call:</p>
+            <ul id="callTimes"></ul>
+        </section>
+    </main>
+
+    <script> 
+
+
+      const userName = prompt('Enter your name:');
+        if (userName) {
+          userNameElement.textContent = userName;
+
+        // Determine user's timezone
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        document.getElementById('userTimezone').textContent = userTimezone;
+
+
+  
+      
+          const cities = [
+            { name: 'New York', offset: -4 },
+            { name: 'London', offset: 1 },
+            { name: 'Tokyo', offset: 9 },
+          ];
+      
+        // Function to update times
+        function updateTimes() {
+            const cityTimesElement = document.getElementById('cityTimes');
+            cityTimesElement.innerHTML = ''; // Clear previous times
+
+            cities.forEach(city => {
+                const cityTime = new Date().getUTCHours() + city.offset;
+                const cityTimeFormatted = cityTime < 0 ? cityTime + 24 : cityTime;
+                const timeDifference = cityTime - (new Date().getUTCHours());
+
+                const listItem = document.createElement('li');
+                listItem.textContent = `${city.name}: ${cityTimeFormatted}:00 (${timeDifference > 0 ? '+' : ''}${timeDifference} hours)`;
+                cityTimesElement.appendChild(listItem);
+            });
+        }
+      }
+
+        // Update times initially and every minute
+          updateTimes();
+         setInterval(updateTimes, 60000); // Update every minute
+      
+        </script>
+
+</body>
+</html>
+
