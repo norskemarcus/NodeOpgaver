@@ -46,6 +46,11 @@ ul {
 #userName {
   font-weight: bold;
 }
+
+#citySelector, #homeCitySelector  {
+  padding: 5px;
+  font-size: large;
+}
   </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,7 +59,7 @@ ul {
 </head>
 <body>
     <header>
-        <h1> <h1>World Time Converter</h1></h1>
+        <h1>World Time Converter</h1>
         <p id="greeting">Hello, <span id="userName">stranger</span>!</p>
     
     </header>
@@ -65,57 +70,190 @@ ul {
         </section>
     
         <section>
-            <h2>Time in Different Cities</h2>
-            <ul id="cityTimes"></ul>
+          <h4>Where are you right now?</h4>
+          <select id="homeCitySelector" onchange="calculateTimeDifference()">
+          </select>
         </section>
 
         <section>
-            <h2>Best Time to Call</h2>
-            <p>Based on your local time, here's when it's appropriate to call:</p>
-            <ul id="callTimes"></ul>
+          <h4>Where do you want to call?</h4>
+          <select id="citySelector" onchange="calculateTimeDifference()">
+          </select>
         </section>
+        <div id="timeDifference"></div>
+        
     </main>
 
-    <script> 
+  <script> 
 
 
-      const userName = prompt('Enter your name:');
-        if (userName) {
-          userNameElement.textContent = userName;
+    /*  const userNameInput = prompt('Enter your name:');
+    if (userNameInput) {
+      const userNameElement = document.getElementById('userName');
+      userNameElement.textContent = userNameInput;
+          
+    } */
 
-        // Determine user's timezone
-        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        document.getElementById('userTimezone').textContent = userTimezone;
+    // Determine user's timezone
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.getElementById('userTimezone').textContent = userTimezone;
 
 
   
-      
-          const cities = [
-            { name: 'New York', offset: -4 },
-            { name: 'London', offset: 1 },
-            { name: 'Tokyo', offset: 9 },
-          ];
-      
-        // Function to update times
-        function updateTimes() {
-            const cityTimesElement = document.getElementById('cityTimes');
-            cityTimesElement.innerHTML = ''; // Clear previous times
+      //  offset = time zone offset in hours relative to UTC
+/*     const cities = [
+      { name: 'New York', offset: -4 },
+      { name: 'London', offset: 1 },
+      { name: 'Tokyo', offset: 9 },
+      { name: 'Beijing', offset: 8 },
+      { name: 'Paris', offset: 2 },
+      { name: 'Los Angeles', offset: -7 },
+      { name: 'Sydney', offset: 10 },
+      { name: 'Moscow', offset: 3 },
+      { name: 'Dubai', offset: 4 },
+      { name: 'São Paulo', offset: -3 },
+      { name: 'Mumbai', offset: 5.5 },
+      { name: 'Toronto', offset: -4 },
+      { name: 'Singapore', offset: 8 },
+      { name: 'Istanbul', offset: 3 },
+      { name: 'Cairo', offset: 2 },
+      { name: 'Johannesburg', offset: 2 },
+      { name: 'Bangkok', offset: 7 },
+      { name: 'Mexico City', offset: -5 },
+      { name: 'Buenos Aires', offset: -3 },
+      { name: 'Chicago', offset: -5 },
 
-            cities.forEach(city => {
-                const cityTime = new Date().getUTCHours() + city.offset;
-                const cityTimeFormatted = cityTime < 0 ? cityTime + 24 : cityTime;
-                const timeDifference = cityTime - (new Date().getUTCHours());
+    ];
+       */
+    var timeZoneList = [
+  {"value":"Europe/London","text":"(UTC+00:00) London","place":"London","time":"+00:00"},
+  {"value":"Europe/Copenhagen","text":"(UTC+01:00) Copenhagen","place":"Copenhagen","time":"+01:00"},
+  {"value":"Europe/Paris","text":"(UTC+01:00) Paris","place":"Paris","time":"+01:00"},
+  {"value":"Asia/Dubai","text":"(UTC+04:00) Dubai","place":"Dubai","time":"+04:00"},
+  {"value":"Asia/Kolkata","text":"(UTC+05:30) Mumbai","place":"Mumbai","time":"+05:30"},
+  {"value":"Asia/Singapore","text":"(UTC+08:00) Singapore","place":"Singapore","time":"+08:00"},
+  {"value":"Asia/Tokyo","text":"(UTC+09:00) Tokyo","place":"Tokyo","time":"+09:00"},
+  {"value":"Pacific/Auckland","text":"(UTC+12:00) Auckland","place":"Auckland","time":"+12:00"},
+  {"value":"America/New_York","text":"(UTC-05:00) Eastern Time (US & Canada)","place":"Eastern Time (US & Canada)","time":"-05:00"},
+  {"value":"America/Chicago","text":"(UTC-06:00) Central Time (US & Canada)","place":"Central Time (US & Canada)","time":"-06:00"},
+  {"value":"America/Phoenix","text":"(UTC-07:00) Arizona","place":"Arizona","time":"-07:00"},
+  {"value":"America/Anchorage","text":"(UTC-09:00) Alaska","place":"Alaska","time":"-09:00"},
+  {"value":"America/Los_Angeles","text":"(UTC-08:00) Pacific Time (US & Canada)","place":"Pacific Time (US & Canada)","time":"-08:00"},
+  {"value":"Pacific/Honolulu","text":"(UTC-10:00) Hawaii","place":"Hawaii","time":"-10:00"},
+];
 
-                const listItem = document.createElement('li');
-                listItem.textContent = `${city.name}: ${cityTimeFormatted}:00 (${timeDifference > 0 ? '+' : ''}${timeDifference} hours)`;
-                cityTimesElement.appendChild(listItem);
-            });
-        }
+   // Populate the dropdown for selecting the home city and city to call
+    const homeCitySelector = document.getElementById('homeCitySelector');
+    const citySelector = document.getElementById('citySelector');
+    populateDropdown(homeCitySelector, timeZoneList);
+    populateDropdown(citySelector, timeZoneList);
+
+
+     // Function to populate a dropdown with cities
+     function populateDropdown(selector, cityArray) {
+      // Create an initial "Select a City" option
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.text = 'Select a City';
+      selector.appendChild(defaultOption);
+
+      // Populate the dropdown with city options from the provided cityArray
+      cityArray.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city.value;
+        option.text = city.text;
+        selector.appendChild(option);
+      });
+    }
+
+
+
+
+ // Function to calculate and display the time difference
+ function calculateTimeDifference() {
+      const homeCity = document.getElementById('homeCitySelector').value;
+      const selectedCity = document.getElementById('citySelector').value;
+
+      if (!homeCity || !selectedCity) {
+        return;
       }
 
+      const homeCityData = timeZoneList.find(city => city.value === homeCity);
+  const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
+
+  if (homeCityData && selectedCityData) {
+    const homeTimeOffset = parseFloat(homeCityData.time);
+    const selectedTimeOffset = parseFloat(selectedCityData.time);
+    const timeDifference = selectedTimeOffset - homeTimeOffset;
+
+    const timeDifferenceElement = document.getElementById('timeDifference');
+    timeDifferenceElement.textContent = `Time difference: ${timeDifference > 0 ? '+' : ''}${timeDifference} hours`;
+  }
+}
+
+
+
+
+
+
+// Function to update city information when a city is selected from the dropdown
+ function updateSelectedCity() {
+  const selectedCity = document.getElementById('citySelector').value;
+  const cityData = cities.find(city => city.name === selectedCity);
+
+  if (cityData) {
+    const userTimezoneOffset = new Date().getTimezoneOffset() / 60;
+    const timeDifference = userTimezoneOffset - cityData.offset;
+
+    const cityInfoElement = document.getElementById('cityInfo');
+    cityInfoElement.textContent = `You selected ${selectedCity}. It is ${timeDifference > 0 ? '+' : ''}${timeDifference} hours from your current time zone.`;
+  }
+} 
+
+
+  // Function to update times
+/*   function updateTimes() {
+      const cityTimesElement = document.getElementById('cityTimes');
+      cityTimesElement.innerHTML = ''; // Clear previous times
+
+      cities.forEach(city => {
+          const cityTime = new Date().getUTCHours() + city.offset;
+          const cityTimeFormatted = cityTime < 0 ? cityTime + 24 : cityTime;
+          const timeDifference = cityTime - (new Date().getUTCHours());
+
+          const listItem = document.createElement('li');
+          listItem.textContent = `${city.name}: ${cityTimeFormatted}:00 (${timeDifference > 0 ? '+' : ''}${timeDifference} hours)`;
+          cityTimesElement.appendChild(listItem);
+      });
+  } */
+  
+/* 
+      // Function to update callable cities
+      function updateCallableCities() {
+        const callableCitiesElement = document.getElementById('callableCities');
+        callableCitiesElement.innerHTML = ''; // Clear previous cities
+
+        const currentHour = new Date().getUTCHours();
+
+        for (let i = 0; i < cities.length; i++) {
+          const city = cities[i];
+          const cityTime = currentHour + city.offset;
+          if (cityTime >= 9 && cityTime <= 18) { // Assuming calling hours are between 9 AM and 6 PM
+            const listItem = document.createElement('li');
+            listItem.textContent = city.name;
+            callableCitiesElement.appendChild(listItem);
+          }
+        }
+      } */
+
+
         // Update times initially and every minute
-          updateTimes();
-         setInterval(updateTimes, 60000); // Update every minute
+/*          updateCallableCities();
+         setInterval(updateCallableCities, 60000); // Update every minute
+
+         updateTimes();
+         setInterval(updateTimes, 60000);
+ */
       
         </script>
 
