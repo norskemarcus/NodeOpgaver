@@ -6,10 +6,11 @@ app.use(express.static('public')); // Serve static files from the 'public' folde
 
 app.get('/timezones', (req, res) => {
   try {
-    res.setHeader('Content-Type', 'application/json');
-    const timeZones = fs.readFileSync(__dirname + 'timeZone.json');
+    const timeZones = fs.readFileSync(__dirname + '/timeZone.json');
     console.log('Success', timeZones);
-    res.send(JSON.parse(timeZones)); // hvis ikke parser, kommer det et byte array
+
+    res.setHeader('Content-Type', 'application/json'); // Set content type
+    res.send(JSON.parse(timeZones)); // Parse and send JSON data, hvis man ikke parser, kommer det et byte array
   } catch (error) {
     console.log('Cannot read from file', error);
     res.status('500').send({ message: 'Cannot read from file' });
