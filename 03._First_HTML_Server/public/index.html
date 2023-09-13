@@ -51,7 +51,7 @@
             const homeCity = document.getElementById('homeCitySelector').value;
             const selectedCity = document.getElementById('citySelector').value;
 
-            if (!homeCity || !selectedCity || !timeZoneList) {
+            if (!homeCity || !selectedCity || !timeZoneList.length) {
                 return;
             }
 
