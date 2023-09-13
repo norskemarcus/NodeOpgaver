@@ -61,14 +61,16 @@ async function fetchTimeZones() {
 
 // Function to calculate and display the time difference
 async function calculateTimeDifference() {
-    const homeCity = document.getElementById('homeCitySelector').value;
-    const selectedCity = document.getElementById('citySelector').value;
+  
+  timeZoneList = await fetchTimeZones(); // Fetch time zones
 
-    if (!homeCity || !selectedCity) {
-        return;
-    }
+const homeCity = document.getElementById('homeCitySelector').value;
+const selectedCity = document.getElementById('citySelector').value;
 
-    timeZoneList = await fetchTimeZones(); // Fetch time zones
+if (!homeCity || !selectedCity || !timeZoneList) {
+    return;
+}
+
 
     const homeCityData = timeZoneList.find(city => city.value === homeCity);
     const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
