@@ -33,7 +33,7 @@
 
   let timeZoneList;
     
-   fetch("/timezones")
+  /*  fetch("/timezones")
     .then(response => response.json())
     .then(result => {
       timeZoneList = result; // Assign the fetched data to timeZoneList
@@ -45,9 +45,7 @@
       populateDropdown(citySelector, timeZoneList);
 
     })
-
-
-
+ */
 
 
      // Function to populate a dropdown with cities
@@ -92,7 +90,24 @@
       }
     }
 
-      
+      // Fetch the timeZoneList and populate dropdowns after the page has loaded
+      window.addEventListener('load', () => {
+            fetch("/timezones")
+                .then(response => response.json())
+                .then(data => {
+                    timeZoneList = data; // Assign the fetched data to timeZoneList
+
+                    // Populate the dropdown for selecting the home city and city to call
+                    const homeCitySelector = document.getElementById('homeCitySelector');
+                    const citySelector = document.getElementById('citySelector');
+                    populateDropdown(homeCitySelector, timeZoneList);
+                    populateDropdown(citySelector, timeZoneList);
+
+                    // Attach onchange event listeners after timeZoneList is assigned
+                    homeCitySelector.addEventListener('change', calculateTimeDifference);
+                    citySelector.addEventListener('change', calculateTimeDifference);
+                });
+        });
   </script>
 
 </body>
