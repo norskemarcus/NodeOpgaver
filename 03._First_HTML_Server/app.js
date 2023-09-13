@@ -5,14 +5,15 @@ const app = express();
 app.use(express.static('public')); // Serve static files from the 'public' folder
 
 app.get('/timezones', (req, res) => {
-  try {
+  res.send({ message: 'timeZones' });
+  /* try {
     const timeZones = fs.readFileSync('timeZone.json');
     console.log('Success', timeZones);
     res.send(JSON.parse(timeZones)); // hvis ikke parser, kommer det et byte array
   } catch (error) {
     console.log('Cannot read from file', error);
     res.status('500').send({ message: 'Cannot read from file' });
-  }
+  } */
 });
 
 // Hele = route
