@@ -38,9 +38,8 @@ app.get('/public/fanfare.mp3', (req, res) => {
   res.sendFile(__dirname + '/public/fanfare.mp3', { headers: { 'Content-Type': 'audio/mpeg' } });
 });
 
-app.get('/favicon.ico', (req, res) => {
-  res.sendFile(__dirname + '/public/favicon.ico');
-  // res.setHeader('Content-Type', 'image/x-icon');
+app.get('/favicon.png', (req, res) => {
+  res.sendFile(__dirname + '/public/favicon.png');
 });
 
 const PORT = 8080;

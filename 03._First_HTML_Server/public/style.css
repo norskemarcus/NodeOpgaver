@@ -51,11 +51,15 @@ ul {
   margin-top: 10px;
 }
 
+#exploreHeading {
+  margin-top: 5em;
+}
+
 /*  Countdown Timer link */
 a.countdown-link {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #007BFF;
+  background-color: #273341;
   color: #fff;
   text-decoration: none;
   border-radius: 5px;
@@ -65,5 +69,9 @@ a.countdown-link {
 
 
 a.countdown-link:hover {
-  background-color: #0056b3;
+  background-color: #63a2e6;
+}
+
+#backButton {
+  margin-top: 5em;
 }
