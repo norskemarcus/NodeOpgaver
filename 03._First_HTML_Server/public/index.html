@@ -80,7 +80,8 @@
       // Fetch the timeZoneList 
       fetch("/timezones")
                   .then(response => response.json())
-                  .then(timeZoneList => {
+                  .then(result => {
+                    timeZoneList = result; // Assign the fetched data to timeZoneList
                       const homeCityData = timeZoneList.find(city => city.value === homeCity);
                       const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
 
