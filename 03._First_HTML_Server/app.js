@@ -30,8 +30,17 @@ app.get('/style.css', (req, res) => {
   res.sendFile(__dirname + '/public/style.css');
 });
 
-app.get('/second', (req, res) => {
-  res.sendFile(__dirname + '/public/secondPage.html');
+app.get('/timer', (req, res) => {
+  res.sendFile(__dirname + '/public/timer.html');
+});
+
+app.get('/public/fanfare.mp3', (req, res) => {
+  res.sendFile(__dirname + '/public/fanfare.mp3', { headers: { 'Content-Type': 'audio/mpeg' } });
+});
+
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(__dirname + '/public/favicon.ico');
+  // res.setHeader('Content-Type', 'image/x-icon');
 });
 
 const PORT = 8080;

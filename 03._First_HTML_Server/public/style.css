@@ -50,3 +50,20 @@ ul {
 #timeDifference {
   margin-top: 10px;
 }
+
+/*  Countdown Timer link */
+a.countdown-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+
+a.countdown-link:hover {
+  background-color: #0056b3;
+}
