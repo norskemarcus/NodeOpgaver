@@ -1,6 +1,19 @@
+const fs = require('fs');
 const express = require('express');
+
 const app = express();
 app.use(express.static('public')); // Serve static files from the 'public' folder
+
+app.get('/timezones', (req, res) => {
+  try {
+    const timeZones = fs.readFileSync('timeZone.json');
+    console.log('Success', timeZones);
+    res.send(JSON.parse(timeZones)); // hvis ikke parser, kommer det et byte array
+  } catch (error) {
+    console.log('Cannot read from file', error);
+    res.status('500').send({ message: 'Cannot read from file' });
+  }
+});
 
 // Hele = route
 // husk __direname + / før filnavnet, ellers mangler det en trailing stash!
@@ -9,9 +22,8 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-// create a route for the page "secondPage.html"
-app.get('/second', (req, res) => {
-  res.sendFile(__dirname + '/public/secondPage.html');
+app.get('/style.css', (req, res) => {
+  res.sendFile(__dirname + '/public/style.css');
 });
 
 // = Server, sender respons
@@ -24,16 +36,7 @@ app.get('/second', (req, res) => {
   }
 });
  */
-/* 
-app.get('/time', (req, res) => {
-  const clientName = req.query.user;
-  if (!clientName) {
-    res.send({ data: 'Hello stranger' });
-  } else {
-    res.send({ data: `Welcome to my fancy website, ${clientName}` });
-  }
-});
- */
+
 const PORT = 8080;
 app.listen(8080, error => {
   if (error) {
