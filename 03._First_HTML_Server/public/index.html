@@ -77,18 +77,25 @@
         return;
       }
 
-      const homeCityData = timeZoneList.find(city => city.value === homeCity);
-      const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
+      // Fetch the timeZoneList 
+      fetch("/timezones")
+                  .then(response => response.json())
+                  .then(timeZoneList => {
+                      const homeCityData = timeZoneList.find(city => city.value === homeCity);
+                      const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
 
-      if (homeCityData && selectedCityData) {
-        const homeTimeOffset = parseFloat(homeCityData.time);
-        const selectedTimeOffset = parseFloat(selectedCityData.time);
-        const timeDifference = selectedTimeOffset - homeTimeOffset;
+                      if (homeCityData && selectedCityData) {
+                          const homeTimeOffset = parseFloat(homeCityData.time);
+                          const selectedTimeOffset = parseFloat(selectedCityData.time);
+                          const timeDifference = selectedTimeOffset - homeTimeOffset;
 
-        const timeDifferenceElement = document.getElementById('timeDifference');
-        timeDifferenceElement.textContent = `Time difference: ${timeDifference > 0 ? '+' : ''}${timeDifference} hours`;
-      }
-    }
+                          const timeDifferenceElement = document.getElementById('timeDifference');
+                          timeDifferenceElement.textContent = `Time difference: ${timeDifference > 0 ? '+' : ''}${timeDifference} hours`;
+                      }
+                  });
+          }
+
+
 
       // Fetch the timeZoneList and populate dropdowns after the page has loaded
       window.addEventListener('load', () => {
