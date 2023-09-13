@@ -4,26 +4,26 @@ const express = require('express');
 const app = express();
 app.use(express.static('public')); // Serve static files from the 'public' folder
 
+// Hele = route
+// husk __direname + / før filnavnet, ellers mangler det en trailing stash!
+// serve html express with express, man sender html til klienten
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
+
 app.get('/timezones', (req, res) => {
   try {
-    const timeZones = fs.readFileSync(__dirname + '/timeZone.json', 'utf-8');
+    const filePath = __dirname + '/timeZone.json';
+    const timeZones = fs.readFileSync(filePath, 'utf-8');
     console.log('Success', timeZones);
 
     res.setHeader('Content-Type', 'application/json'); // Set content type
     res.send(JSON.parse(timeZones)); // Parse and send JSON data, hvis man ikke parser, kommer det et byte array
   } catch (error) {
-    console.log('Cannot read from file', error);
-    res.status('500').send({ message: 'Cannot read from file' });
+    console.log('Error reading the file:', error);
+    res.status(500).send({ message: 'Cannot read from file' });
   }
-});
-
-// Hele = route
-// husk __direname + / før filnavnet, ellers mangler det en trailing stash!
-// serve html express with express, man sender html til klienten
-
-// OBS DETTE VIRKER IKKE
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
 });
 
 app.get('/style.css', (req, res) => {
