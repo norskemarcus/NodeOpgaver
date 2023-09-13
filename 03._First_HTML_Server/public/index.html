@@ -31,10 +31,12 @@
 
   <script> 
 
-
-   const timeZoneList =  fetch("/timezones")
+  let timeZoneList;
+    
+   fetch("/timezones")
     .then(response => response.json())
-    .then(timeZoneList => {
+    .then(result => {
+      timeZoneList = result; // Assign the fetched data to timeZoneList
 
       // Populate the dropdown for selecting the home city and city to call
       const homeCitySelector = document.getElementById('homeCitySelector');
