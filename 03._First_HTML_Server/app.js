@@ -27,6 +27,10 @@ app.get('/style.css', (req, res) => {
   res.sendFile(__dirname + '/public/style.css');
 });
 
+app.get('/second', (req, res) => {
+  res.sendFile(__dirname + '/public/secondPage.html');
+});
+
 // = Server, sender respons
 /* app.get('/welcomeMessage', (req, res) => {
   const clientName = req.query.user;
