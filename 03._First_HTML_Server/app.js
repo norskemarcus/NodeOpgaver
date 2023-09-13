@@ -6,7 +6,7 @@ app.use(express.static('public')); // Serve static files from the 'public' folde
 
 app.get('/timezones', (req, res) => {
   try {
-    const timeZones = fs.readFileSync(__dirname + '/timeZone.json');
+    const timeZones = fs.readFileSync(__dirname + '/timeZone.json', 'utf-8');
     console.log('Success', timeZones);
 
     res.setHeader('Content-Type', 'application/json'); // Set content type
