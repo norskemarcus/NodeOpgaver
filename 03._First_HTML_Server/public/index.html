@@ -27,94 +27,85 @@
     </main>
 
     <script>
-        let timeZoneList = []; // Define timeZoneList globally
+      let timeZoneList = []; // Define timeZoneList globally
 
-// Function to populate a dropdown with cities
-function populateDropdown(selector, cityArray) {
-    // Create an initial "Select a City" option
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.text = 'Select a City';
-    selector.appendChild(defaultOption);
+      // Function to populate a dropdown with cities
+      function populateDropdown(selector, cityArray) {
+          // Create an initial "Select a City" option
+          const defaultOption = document.createElement('option');
+          defaultOption.value = '';
+          defaultOption.text = 'Select a City';
+          selector.appendChild(defaultOption);
 
-    // Populate the dropdown with city options from the provided cityArray
-    cityArray.forEach(city => {
-        const option = document.createElement('option');
-        option.value = city.value;
-        option.text = city.text;
-        selector.appendChild(option);
-    });
-}
+          // Populate the dropdown with city options from the provided cityArray
+          cityArray.forEach(city => {
+              const option = document.createElement('option');
+              option.value = city.value;
+              option.text = city.text;
+              selector.appendChild(option);
+          });
+      }
 
-/* // Function to fetch time zones
-async function fetchTimeZones() {
-    try {
-        const response = await fetch("/timezones");
+      // Function to fetch time zones and populate timeZoneList
+      function fetchTimeZonesAndPopulate() {
+          return fetch("/timezones")
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  timeZoneList = data; // Assign fetched data to timeZoneList
+              })
+              .catch(error => {
+                  console.error('Error fetching time zones:', error);
+              });
+      }
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching time zones:', error);
-    }
-} */
+      // Function to calculate and display the time difference
+      function calculateTimeDifference() {
+          const homeCity = document.getElementById('homeCitySelector').value;
+          const selectedCity = document.getElementById('citySelector').value;
 
-// Function to fetch time zones
-function fetchTimeZones() {
-            return fetch("/timezones")
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .catch(error => {
-                    console.error('Error fetching time zones:', error);
-                });
-        }
+          if (!homeCity || !selectedCity || !timeZoneList) {
+              return;
+          }
 
+          const homeCityData = timeZoneList.find(city => city.value === homeCity);
+          const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
 
-// Function to calculate and display the time difference
-async function calculateTimeDifference() {
-    if (timeZoneList.length > 0) {
-        timeZoneList = await fetchTimeZones(); 
-    }
+          if (homeCityData && selectedCityData) {
+              const homeTimeOffset = parseFloat(homeCityData.time);
+              const selectedTimeOffset = parseFloat(selectedCityData.time);
+              const timeDifference = selectedTimeOffset - homeTimeOffset;
 
-    const homeCity = document.getElementById('homeCitySelector').value;
-    const selectedCity = document.getElementById('citySelector').value;
+              const timeDifferenceElement = document.getElementById('timeDifference');
+              timeDifferenceElement.textContent = `Time difference: ${timeDifference > 0 ? '+' : ''}${timeDifference} hours`;
+          }
+      }
 
-    if (!homeCity || !selectedCity || !timeZoneList) {
-        return;
-    }
+      // Fetch the timeZoneList and populate dropdowns after the page has loaded
+      window.addEventListener('load', () => {
+          fetchTimeZonesAndPopulate() // Fetch time zones and populate timeZoneList
+              .then(() => {
+                  // Populate the dropdown for selecting the home city and city to call
+                  const homeCitySelector = document.getElementById('homeCitySelector');
+                  const citySelector = document.getElementById('citySelector');
+                  populateDropdown(homeCitySelector, timeZoneList);
+                  populateDropdown(citySelector, timeZoneList);
 
-    const homeCityData = timeZoneList.find(city => city.value === homeCity);
-    const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
+                  // Attach onchange event listeners after timeZoneList is assigned
+                  homeCitySelector.addEventListener('change', calculateTimeDifference);
+                  citySelector.addEventListener('change', calculateTimeDifference);
+              });
+      });
 
-    if (homeCityData && selectedCityData) {
-        const homeTimeOffset = parseFloat(homeCityData.time);
-        const selectedTimeOffset = parseFloat(selectedCityData.time);
-        const timeDifference = selectedTimeOffset - homeTimeOffset;
-
-        const timeDifferenceElement = document.getElementById('timeDifference');
-        timeDifferenceElement.textContent = `Time difference: ${timeDifference > 0 ? '+' : ''}${timeDifference} hours`;
-    }
-}
-
-// Fetch the timeZoneList and populate dropdowns after the page has loaded
-window.addEventListener('load', async () => {
-    timeZoneList = await fetchTimeZones(); // Fetch time zones
-
-    // Populate the dropdown for selecting the home city and city to call
-    const homeCitySelector = document.getElementById('homeCitySelector');
-    const citySelector = document.getElementById('citySelector');
-    populateDropdown(homeCitySelector, timeZoneList);
-    populateDropdown(citySelector, timeZoneList);
-
-    // Attach onchange event listeners after timeZoneList is assigned
-    homeCitySelector.addEventListener('change', calculateTimeDifference);
-    citySelector.addEventListener('change', calculateTimeDifference);
-});
-    </script>
+      // Attach onchange event listeners to update time difference when dropdowns change
+      const homeCitySelector = document.getElementById('homeCitySelector');
+      const citySelector = document.getElementById('citySelector');
+      homeCitySelector.addEventListener('change', calculateTimeDifference);
+      citySelector.addEventListener('change', calculateTimeDifference);
+  </script>
 </body>
 </html>
