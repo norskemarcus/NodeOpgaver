@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 app.get('/timezones', (req, res) => {
   try {
-    const filePath = __dirname + '/timeZone.json';
+    const filePath = __dirname + '/public/timeZone.json';
     const timeZones = fs.readFileSync(filePath, 'utf-8');
     console.log('Success', timeZones);
 
