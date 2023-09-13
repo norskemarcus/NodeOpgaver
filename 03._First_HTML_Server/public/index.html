@@ -67,10 +67,13 @@ async function calculateTimeDifference() {
 const homeCity = document.getElementById('homeCitySelector').value;
 const selectedCity = document.getElementById('citySelector').value;
 
-if (!homeCity || !selectedCity || !timeZoneList) {
+if (!homeCity || !selectedCity) {
     return;
-}
+    }
 
+if (timeZoneList == null) {
+    timeZoneList = await fetchTimeZones(); // Fetch time zones if not already fetched
+}
 
     const homeCityData = timeZoneList.find(city => city.value === homeCity);
     const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
