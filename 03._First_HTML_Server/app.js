@@ -20,7 +20,7 @@ app.get('/timezones', (req, res) => {
 // husk __direname + / før filnavnet, ellers mangler det en trailing stash!
 // serve html express with express, man sender html til klienten
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(__dirname + '/public/secondPage.html');
 });
 
 app.get('/style.css', (req, res) => {
