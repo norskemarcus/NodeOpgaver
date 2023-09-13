@@ -27,7 +27,7 @@
     </main>
 
     <script>
-          let timeZoneList = null; // Define timeZoneList globally
+        let timeZoneList = null; // Define timeZoneList globally
 
 // Function to populate a dropdown with cities
 function populateDropdown(selector, cityArray) {
@@ -61,19 +61,16 @@ async function fetchTimeZones() {
 
 // Function to calculate and display the time difference
 async function calculateTimeDifference() {
-
-  timeZoneList = await fetchTimeZones(); // Fetch time zones
-
-const homeCity = document.getElementById('homeCitySelector').value;
-const selectedCity = document.getElementById('citySelector').value;
-
-if (!homeCity || !selectedCity) {
-    return;
+    if (!timeZoneList) {
+        timeZoneList = await fetchTimeZones(); // Fetch time zones once if timeZoneList is null
     }
 
-if (timeZoneList == null) {
-    timeZoneList = await fetchTimeZones(); // Fetch time zones if not already fetched
-}
+    const homeCity = document.getElementById('homeCitySelector').value;
+    const selectedCity = document.getElementById('citySelector').value;
+
+    if (!homeCity || !selectedCity || !timeZoneList) {
+        return;
+    }
 
     const homeCityData = timeZoneList.find(city => city.value === homeCity);
     const selectedCityData = timeZoneList.find(city => city.value === selectedCity);

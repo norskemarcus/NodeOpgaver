@@ -1,5 +1,5 @@
-const fs = require('fs');
 const express = require('express');
+const fs = require('fs');
 
 const app = express();
 app.use(express.static('public')); // Serve static files from the 'public' folder
@@ -33,17 +33,6 @@ app.get('/style.css', (req, res) => {
 app.get('/second', (req, res) => {
   res.sendFile(__dirname + '/public/secondPage.html');
 });
-
-// = Server, sender respons
-/* app.get('/welcomeMessage', (req, res) => {
-  const clientName = req.query.user;
-  if (!clientName) {
-    res.send({ data: 'Hello stranger' });
-  } else {
-    res.send({ data: `Welcome to my fancy website, ${clientName}` });
-  }
-});
- */
 
 const PORT = 8080;
 app.listen(8080, error => {
