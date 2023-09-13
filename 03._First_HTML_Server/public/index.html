@@ -10,28 +10,45 @@
     <header>
         <h1>World Time Converter</h1>
   
-        <header>
-          <h1>World Time Converter</h1>
-      </header>
-  
-      <main>
-          <section>
-              <h4>Where are you right now?</h4>
-              <select id="homeCitySelector" onchange="calculateTimeDifference()">
-              </select>
-          </section>
-  
-          <section>
-              <h4>Where do you want to call?</h4>
-              <select id="citySelector" onchange="calculateTimeDifference()">
-              </select>
-          </section>
-          <div id="timeDifference"></div>
-      </main>
-  
+    </header>
+
+    <main>
+     
+        <section>
+          <h4>Where are you right now?</h4>
+          <select id="homeCitySelector" onchange="calculateTimeDifference(event)">
+          </select>
+          <select id="citySelector" onchange="calculateTimeDifference(event)">
+          </select>
+        </section>
+
+        <section>
+          <h4>Where do you want to call?</h4>
+          <select id="citySelector" onchange="calculateTimeDifference()">
+          </select>
+        </section>
+        <div id="timeDifference"></div>
+        
+    </main>
 
   <script> 
- let timeZoneList; // Define timeZoneList globally
+   // let timeZoneList; // Define timeZoneList globally
+
+    let timeZoneList = fetch ("/timezones")
+        .then(response => response.json())
+        .then(result => {
+            //timeZoneList = result; // Assign the fetched data to timeZoneList
+
+            // Populate the dropdown for selecting the home city and city to call
+            const homeCitySelector = document.getElementById('homeCitySelector');
+            const citySelector = document.getElementById('citySelector');
+            populateDropdown(homeCitySelector, timeZoneList);
+            populateDropdown(citySelector, timeZoneList);
+
+            // Attach onchange event listeners after timeZoneList is assigned
+            homeCitySelector.addEventListener('change', calculateTimeDifference);
+            citySelector.addEventListener('change', calculateTimeDifference);
+        });
 
 // Function to populate a dropdown with cities
 function populateDropdown(selector, cityArray) {
@@ -55,7 +72,7 @@ function calculateTimeDifference() {
     const homeCity = document.getElementById('homeCitySelector').value;
     const selectedCity = document.getElementById('citySelector').value;
 
-    if (!homeCity || !selectedCity || !timeZoneList) {
+    if (!homeCity || !selectedCity) {
         return;
     }
 
@@ -73,30 +90,23 @@ function calculateTimeDifference() {
 }
 
 // Fetch the timeZoneList and populate dropdowns after the page has loaded
-async function fetchTimeZoneListAndPopulateDropdowns() {
-    try {
-        const response = await fetch("/timezones");
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        timeZoneList = await response.json();
+/* window.addEventListener('load', () => {
+    fetch("/timezones")
+        .then(response => response.json())
+        .then(result => {
+            timeZoneList = result; // Assign the fetched data to timeZoneList
 
-        // Populate the dropdown for selecting the home city and city to call
-        const homeCitySelector = document.getElementById('homeCitySelector');
-        const citySelector = document.getElementById('citySelector');
-        populateDropdown(homeCitySelector, timeZoneList);
-        populateDropdown(citySelector, timeZoneList);
+            // Populate the dropdown for selecting the home city and city to call
+            const homeCitySelector = document.getElementById('homeCitySelector');
+            const citySelector = document.getElementById('citySelector');
+            populateDropdown(homeCitySelector, timeZoneList);
+            populateDropdown(citySelector, timeZoneList);
 
-        // Attach onchange event listeners after timeZoneList is assigned
-        homeCitySelector.addEventListener('change', calculateTimeDifference);
-        citySelector.addEventListener('change', calculateTimeDifference);
-    } catch (error) {
-        console.error('Error fetching time zones:', error);
-    }
-}
-
-// Call the function to fetch time zones when the page loads
-fetchTimeZoneListAndPopulateDropdowns();
+            // Attach onchange event listeners after timeZoneList is assigned
+            homeCitySelector.addEventListener('change', calculateTimeDifference);
+            citySelector.addEventListener('change', calculateTimeDifference);
+        });
+}); */
   </script>
 
 </body>
