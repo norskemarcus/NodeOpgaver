@@ -30,7 +30,7 @@
     </main>
 
   <script> 
-  let timeZoneList;
+ let timeZoneList;
 
 // Function to populate a dropdown with cities
 function populateDropdown(selector, cityArray) {
@@ -49,40 +49,40 @@ function populateDropdown(selector, cityArray) {
     });
 }
 
-// Function to calculate and display the time difference
-function calculateTimeDifference() {
-    const homeCity = document.getElementById('homeCitySelector').value;
-    const selectedCity = document.getElementById('citySelector').value;
-
-    if (!homeCity || !selectedCity) {
-        return;
-    }
-
-    const homeCityData = timeZoneList.find(city => city.value === homeCity);
-    const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
-
-    if (homeCityData && selectedCityData) {
-        const homeTimeOffset = parseFloat(homeCityData.time);
-        const selectedTimeOffset = parseFloat(selectedCityData.time);
-        const timeDifference = selectedTimeOffset - homeTimeOffset;
-
-        const timeDifferenceElement = document.getElementById('timeDifference');
-        timeDifferenceElement.textContent = `Time difference: ${timeDifference > 0 ? '+' : ''}${timeDifference} hours`;
-    }
-}
-
 // Fetch the timeZoneList and populate dropdowns after the page has loaded
 window.addEventListener('load', () => {
     fetch("/timezones")
         .then(response => response.json())
-        .then(data => {
-            timeZoneList = data; // Assign the fetched data to timeZoneList
+        .then(result => {
+            timeZoneList = result; 
 
             // Populate the dropdown for selecting the home city and city to call
             const homeCitySelector = document.getElementById('homeCitySelector');
             const citySelector = document.getElementById('citySelector');
             populateDropdown(homeCitySelector, timeZoneList);
             populateDropdown(citySelector, timeZoneList);
+
+            // Function to calculate and display the time difference
+            function calculateTimeDifference() {
+                const homeCity = document.getElementById('homeCitySelector').value;
+                const selectedCity = document.getElementById('citySelector').value;
+
+                if (!homeCity || !selectedCity) {
+                    return;
+                }
+
+                const homeCityData = timeZoneList.find(city => city.value === homeCity);
+                const selectedCityData = timeZoneList.find(city => city.value === selectedCity);
+
+                if (homeCityData && selectedCityData) {
+                    const homeTimeOffset = parseFloat(homeCityData.time);
+                    const selectedTimeOffset = parseFloat(selectedCityData.time);
+                    const timeDifference = selectedTimeOffset - homeTimeOffset;
+
+                    const timeDifferenceElement = document.getElementById('timeDifference');
+                    timeDifferenceElement.textContent = `Time difference: ${timeDifference > 0 ? '+' : ''}${timeDifference} hours`;
+                }
+            }
 
             // Attach onchange event listeners after timeZoneList is assigned
             homeCitySelector.addEventListener('change', calculateTimeDifference);
