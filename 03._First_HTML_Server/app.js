@@ -22,7 +22,7 @@ app.get('/timezones', (req, res) => {
     res.send(JSON.parse(timeZones)); // Parse and send JSON data, hvis man ikke parser, kommer det et byte array
   } catch (error) {
     console.log('Error reading the file:', error);
-    res.status(500).send({ message: 'Cannot read from file' });
+    res.status(500).send({ error: 'Error reading the time zones file', message: error.message });
   }
 });
 
