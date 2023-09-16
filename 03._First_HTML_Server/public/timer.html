@@ -65,6 +65,13 @@
           return;
         }
 
+        // Check if the selected date and time are in the past
+        const currentDate = new Date().getTime();
+        if (targetDate <= currentDate) {
+          alert('Please select a future date and time.');
+          return;
+        }
+
         // Update the countdown every second
         const countdownInterval = setInterval(() => {
           const currentDate = new Date().getTime();

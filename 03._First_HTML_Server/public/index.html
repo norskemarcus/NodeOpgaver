@@ -42,6 +42,11 @@
         ></select>
       </section>
       <div id="timeDifference"></div>
+      <br />
+      <div
+        id="warningMessage"
+        style="color: red"
+      ></div>
 
       <section>
         <h4 id="exploreHeading">Explore more</h4>
@@ -109,6 +114,31 @@
 
           const timeDifferenceElement = document.getElementById('timeDifference');
           timeDifferenceElement.textContent = `Time difference: ${timeDifference > 0 ? '+' : ''}${timeDifference} hours`;
+
+          // Get the current UTC time
+          const currentUTC = new Date();
+          const currentHour = currentUTC.getUTCHours();
+          const currentMinutes = currentUTC.getUTCMinutes();
+
+          // Calculate the selected city's local time
+          const selectedCityCurrentHour = currentHour + selectedTimeOffset;
+          const selectedCityHour = selectedCityCurrentHour >= 10 ? selectedCityCurrentHour : '0' + selectedCityCurrentHour;
+          const currentTime = selectedCityCurrentHour >= 21 ? 'evening' : 'morning';
+
+          // Extract city name, removing time zone offset
+          const cityName = selectedCityData.text.replace(/\s*\(.*\)/, '');
+
+          const warningMessage = `You should only call if it's an emergency because in ${cityName} the time is now ${selectedCityHour}:${currentMinutes < 10 ? '0' : ''}${currentMinutes} ${currentTime}`;
+
+          // Check if the selected time is within 9 PM to 9 AM
+          if (selectedCityCurrentHour >= 21 || selectedCityCurrentHour < 9) {
+            const warningMessageElement = document.getElementById('warningMessage');
+            warningMessageElement.textContent = warningMessage;
+          } else {
+            // Clear the warning message if it's not within the specified time range
+            const warningMessageElement = document.getElementById('warningMessage');
+            warningMessageElement.textContent = '';
+          }
         }
       }
 
